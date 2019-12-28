@@ -1,0 +1,10 @@
+{
+    "require": {
+        "brozot/laravel-fcm": "^1.3"
+    },
+    "replace": {
+        "illuminate/support": "*",
+        "guzzlehttp/guzzle": "*",
+        "monolog/monolog": "*"
+    }
+}

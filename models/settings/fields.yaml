@@ -1,0 +1,21 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+
+    server_key:
+        label: mohsin.notify::lang.settings.server_key_label
+        commentAbove: mohsin.notify::lang.settings.server_key_comment
+        span: left
+
+    sender_id:
+        label: mohsin.notify::lang.settings.sender_id_label
+        commentAbove: mohsin.notify::lang.settings.sender_id_comment
+        span: right
+
+    logging_enabled:
+        label: mohsin.notify::lang.settings.logging_enabled_label
+        type: switch
+        span: left
+        commentAbove: mohsin.notify::lang.settings.logging_enabled_comment

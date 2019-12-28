@@ -1,0 +1,9 @@
+<?php if ($this->user->hasAccess('mohsin.notify.allow_notification')): ?>
+<a
+    data-control="popup"
+    data-handler="onSendMessage"
+    href="javascript:;"
+    class="btn btn-primary">
+    Send Notification
+</a>
+<?php endif ?>
