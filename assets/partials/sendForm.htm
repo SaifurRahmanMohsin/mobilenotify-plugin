@@ -6,11 +6,6 @@
         </div>
         <div class="modal-body">
             <form data-request="onSendNotification" data-request-error="$(this).closest('.control-popup').addClass('in').popup('setLoading', false).popup('setShake');$.oc.flashMsg({'class': 'error', text: jqXHR.responseText});return false;" data-request-success="$('[data-dismiss=modal]').trigger({ type: 'click' });" data-request-data="user_id: <?= $this->params[0] ?>" class="form-elements" role="form" id="form1">
-                <div class="form-group text-field span-full is-required">
-                    <label>Title</label>
-                    <input type="text" name="notification_title" value="" class="form-control" />
-                </div>
-
                 <div class="form-group text-field span-full size-large is-required">
                     <label>Message</label>
                     <textarea name="notification_message" class="form-control"></textarea>

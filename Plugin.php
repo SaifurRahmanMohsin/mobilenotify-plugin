@@ -80,19 +80,15 @@ class Plugin extends PluginBase
             $controller->addDynamicMethod('onSendNotification', function () use ($controller) {
                 $data = post();
                 $userId = array_get($data, 'user_id');
-                $title = array_get($data, 'notification_title');
                 $message = array_get($data, 'notification_message');
 
-                if (empty($title)) {
-                    throw new ApplicationException(Lang::get('mohsin.notify::lang.notify.empty_title'));
-                }
                 if (empty($message)) {
                     throw new ApplicationException(Lang::get('mohsin.notify::lang.notify.empty_message'));
                 }
 
                 $user = UserModel::find($userId);
                 $token = $user->fcm_token;
-                FCMManager::instance()->sendMessage($token, $title, $message);
+                FCMManager::instance()->sendMessage($token, null, $message);
 
                 Flash::success('Notification Sent!');
             });
@@ -157,6 +153,22 @@ class Plugin extends PluginBase
                 'order'       => 502,
                 'permissions' => ['mohsin.notify.access_settings'],
             ]
+        ];
+    }
+
+    /**
+     * Registers API nodes exposed by this plugin.
+     *
+     * @return array
+     */
+    public function registerNodes()
+    {
+        return [
+            'account/update_fcm/{token}' => [
+                'controller' => 'Mohsin\Notify\Http\FcmToken@update',
+                'action'     => 'store',
+                'middleware' => 'api'
+            ],
         ];
     }
 }

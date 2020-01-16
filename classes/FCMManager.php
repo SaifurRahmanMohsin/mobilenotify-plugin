@@ -1,6 +1,8 @@
 <?php namespace Mohsin\Notify\Classes;
 
 use FCM;
+use BackendAuth;
+use Carbon\Carbon;
 use Mohsin\Notify\Models\Settings;
 use LaravelFCM\Message\OptionsBuilder;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -38,34 +40,16 @@ class FCMManager
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
 
-        $notificationBuilder = new PayloadNotificationBuilder($title);
-        $notificationBuilder->setBody($message)
-                            ->setSound('default');
-
         $dataBuilder = new PayloadDataBuilder();
-        // $dataBuilder->addData(['a_data' => 'my_data']);
+        $dataBuilder->addData([
+            'message' => $message,
+            'created_by' => BackendAuth::getUser()->id,
+            'created_at' => Carbon::now()->toIso8601String()
+        ]);
 
         $option = $optionBuilder->build();
-        $notification = $notificationBuilder->build();
         $data = $dataBuilder->build();
 
-        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
-        // dd($downstreamResponse);
-
-        $downstreamResponse->numberSuccess();
-        $downstreamResponse->numberFailure();
-        $downstreamResponse->numberModification();
-
-        // return Array - you must remove all this tokens in your database
-        $downstreamResponse->tokensToDelete();
-
-        // return Array (key : oldToken, value : new token - you must change the token in your database)
-        $downstreamResponse->tokensToModify();
-
-        // return Array - you should try to resend the message to the tokens in the array
-        $downstreamResponse->tokensToRetry();
-
-        // return Array (key:token, value:error) - in production you should remove from your database the tokens
-        $downstreamResponse->tokensWithError();
+        $downstreamResponse = FCM::sendTo($token, $option, null, $data);
     }
 }

@@ -1,3 +1,5 @@
 1.0.1:
   - First version of Notify
   - user_add_token_field.php
+1.0.2:
+  - Added RESTful plugin complaint API for token refreshing
