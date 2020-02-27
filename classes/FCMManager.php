@@ -52,4 +52,22 @@ class FCMManager
 
         $downstreamResponse = FCM::sendTo($token, $option, null, $data);
     }
+
+    public function sendMessageToGroup($token, $title, $message)
+    {
+        $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60*20);
+
+        $dataBuilder = new PayloadDataBuilder();
+        $dataBuilder->addData([
+            'message' => $message,
+            'created_by' => BackendAuth::getUser()->id,
+            'created_at' => Carbon::now()->toIso8601String()
+        ]);
+
+        $option = $optionBuilder->build();
+        $data = $dataBuilder->build();
+
+        $downstreamResponse = FCM::sendToGroup($token, $option, null, $data);
+    }
 }

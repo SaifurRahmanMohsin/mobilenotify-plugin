@@ -1,3 +1,16 @@
+<?php
+    $action = $isToGroup ? 'onSendGroupNotification' : 'onSendNotification';
+    if($isToGroup) {
+        $userId = $controller->params[0];
+        $groups = \RainLab\User\Models\User::find($userId)
+                    ->groups()
+                    ->where('fcm_token', '!=', '')->lists('name', 'id');
+        $hasToken = !empty($this->formFindModelObject($userId)->fcm_token);
+        if(!$hasToken)
+            throw new \ApplicationException('Error! This feature works only for users who have an FCM token associated with them.');
+    }
+?>
+
 <div class="modal-dialog">
     <div class="modal-content">
         <div class="modal-header">
@@ -5,7 +18,22 @@
             <h4 class="modal-title">Send Notification</h4>
         </div>
         <div class="modal-body">
-            <form data-request="onSendNotification" data-request-error="$(this).closest('.control-popup').addClass('in').popup('setLoading', false).popup('setShake');$.oc.flashMsg({'class': 'error', text: jqXHR.responseText});return false;" data-request-success="$('[data-dismiss=modal]').trigger({ type: 'click' });" data-request-data="user_id: <?= $this->params[0] ?>" class="form-elements" role="form" id="form1">
+            <form data-request="<?= $action ?>" data-request-error="$(this).closest('.control-popup').addClass('in').popup('setLoading', false).popup('setShake');$.oc.flashMsg({'class': 'error', text: jqXHR.responseText});return false;" data-request-success="$('[data-dismiss=modal]').trigger({ type: 'click' });" data-request-data="user_id: <?= $this->params[0] ?>" class="form-elements" role="form" id="form1">
+                <?php if ($isToGroup): ?>
+                <div class="form-group dropdown-field span-full size-large is-required">
+                    <label>Target Group</label>
+                    <select
+                        name="user_group"
+                        class="form-control select-field custom-select select-no-search icon-nothing
+                        ">
+                        <?php foreach ($groups as $id => $value): ?>
+                            <option value="<?= $id ?>">
+                                <?= $value ?>
+                            </option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+                <?php endif ?>
                 <div class="form-group text-field span-full size-large is-required">
                     <label>Message</label>
                     <textarea name="notification_message" class="form-control"></textarea>

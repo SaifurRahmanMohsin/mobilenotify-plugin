@@ -3,3 +3,6 @@
   - user_add_token_field.php
 1.0.2:
   - Added RESTful plugin complaint API for token refreshing
+1.0.3:
+  - Added group messaging support
+  - user_group_add_token_field.php
