@@ -1,6 +1,7 @@
 <?php namespace Mohsin\Notify\Classes;
 
 use FCM;
+use Event;
 use BackendAuth;
 use Carbon\Carbon;
 use Mohsin\Notify\Models\Settings;
@@ -40,16 +41,19 @@ class FCMManager
         $optionBuilder = new OptionsBuilder();
         $optionBuilder->setTimeToLive(60*20);
 
-        $dataBuilder = new PayloadDataBuilder();
-        $dataBuilder->addData([
+        $payloadData = [
             'message' => $message,
             'created_by' => BackendAuth::getUser()->id,
             'created_at' => Carbon::now()->toIso8601String()
-        ]);
+        ];
+
+        $dataBuilder = new PayloadDataBuilder();
+        $dataBuilder->addData($payloadData);
 
         $option = $optionBuilder->build();
         $data = $dataBuilder->build();
 
+        Event::fire('mohsin.notify.notification_sent', [$payloadData]);
         $downstreamResponse = FCM::sendTo($token, $option, null, $data);
     }
 

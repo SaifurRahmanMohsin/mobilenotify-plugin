@@ -3,7 +3,6 @@
 # ===================================
 
 fields:
-
     server_key:
         label: mohsin.notify::lang.settings.server_key_label
         commentAbove: mohsin.notify::lang.settings.server_key_comment

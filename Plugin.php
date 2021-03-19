@@ -79,6 +79,10 @@ class Plugin extends PluginBase
                 'fcm_token'
             ]);
 
+            $model->addDynamicMethod('sendNotification', function ($message, $title = null) use ($model) {
+                FCMManager::instance()->sendMessage($model->fcm_token, $title, $message);
+            });
+
             // For Group Notification
             $model->bindEvent('model.afterSave', function () use ($model) {
                 if (!empty($model->fcm_token)) {
@@ -135,9 +139,7 @@ class Plugin extends PluginBase
                     throw new ApplicationException(Lang::get('mohsin.notify::lang.notify.empty_message'));
                 }
 
-                $user = UserModel::find($userId);
-                $token = $user->fcm_token;
-                FCMManager::instance()->sendMessage($token, null, $message);
+                $user = UserModel::find($userId)->sendNotification($message);
                 Flash::success('Notification Sent!');
             });
 
