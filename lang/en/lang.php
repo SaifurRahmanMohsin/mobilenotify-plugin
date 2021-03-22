@@ -3,6 +3,18 @@
         'name' => 'Notify',
         'description' => 'Mobile plugin to manage notifications'
     ],
+    'user' => [
+        'fcm_token'           => 'FCM Token',
+        'notification_sent'   => 'Notification Sent!',
+        'sent_to_group'       => 'Notification sent to group!',
+        'send_notification'   => 'Send Notification',
+        'send_to_group'       => 'Send to Group',
+        'target_group'        => 'Target Group',
+        'message'             => 'Message',
+        'send'                => 'Send',
+        'cancel'              => 'Cancel',
+        'error_missing_token' => 'Error! This feature works only for users who have an FCM token associated with them.'
+    ],
     'settings' => [
         'name' => 'FCM Settings',
         'description' => 'Manage the FCM configuration.',

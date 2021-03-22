@@ -1,13 +1,16 @@
 <?php
     $action = $isToGroup ? 'onSendGroupNotification' : 'onSendNotification';
+    $user = \RainLab\User\Models\User::find($this->params[0]);
     if($isToGroup) {
-        $userId = $controller->params[0];
-        $groups = \RainLab\User\Models\User::find($userId)
-                    ->groups()
+        $groups = $user->groups()
                     ->where('fcm_token', '!=', '')->lists('name', 'id');
-        $hasToken = !empty($this->formFindModelObject($userId)->fcm_token);
+        $hasToken = !empty($this->formFindModelObject($this->params[0])->fcm_token);
         if(!$hasToken)
-            throw new \ApplicationException('Error! This feature works only for users who have an FCM token associated with them.');
+            throw new \ApplicationException(Lang::get('mohsin.notify::lang.user.error_missing_token'));
+    } else {
+        if(empty($user->fcm_token)) {
+            throw new \ApplicationException(Lang::get('mohsin.notify::lang.user.error_missing_token'));
+        }
     }
 ?>
 
@@ -15,13 +18,13 @@
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">Send Notification</h4>
+            <h4 class="modal-title"><?= e(trans('mohsin.notify::lang.user.send_notification')) ?></h4>
         </div>
         <div class="modal-body">
             <form data-request="<?= $action ?>" data-request-error="$(this).closest('.control-popup').addClass('in').popup('setLoading', false).popup('setShake');$.oc.flashMsg({'class': 'error', text: jqXHR.responseText});return false;" data-request-success="$('[data-dismiss=modal]').trigger({ type: 'click' });" data-request-data="user_id: <?= $this->params[0] ?>" class="form-elements" role="form" id="form1">
                 <?php if ($isToGroup): ?>
                 <div class="form-group dropdown-field span-full size-large is-required">
-                    <label>Target Group</label>
+                    <label><?= e(trans('mohsin.notify::lang.user.target_group')) ?></label>
                     <select
                         name="user_group"
                         class="form-control select-field custom-select select-no-search icon-nothing
@@ -35,14 +38,14 @@
                 </div>
                 <?php endif ?>
                 <div class="form-group text-field span-full size-large is-required">
-                    <label>Message</label>
+                    <label><?= e(trans('mohsin.notify::lang.user.message')) ?></label>
                     <textarea name="notification_message" class="form-control"></textarea>
                 </div>
             </form>
         </div>
         <div class="modal-footer">
-            <button type="submit" form="form1" class="btn btn-primary">Send</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="submit" form="form1" class="btn btn-primary"><?= e(trans('mohsin.notify::lang.user.send')) ?></button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><?= e(trans('mohsin.notify::lang.user.cancel')) ?></button>
         </div>
     </div>
 </div>

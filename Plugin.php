@@ -140,7 +140,7 @@ class Plugin extends PluginBase
                 }
 
                 $user = UserModel::find($userId)->sendNotification($message);
-                Flash::success('Notification Sent!');
+                Flash::success(Lang::get('mohsin.notify::lang.user.notification_sent'));
             });
 
             $controller->addDynamicMethod('onSendGroupNotification', function () use ($controller) {
@@ -156,7 +156,7 @@ class Plugin extends PluginBase
 
                 $group = UserGroupModel::find($groupId);
                 FCMManager::instance()->sendMessageToGroup($group->fcm_token, null, $message);
-                Flash::success('Notification sent to group!');
+                Flash::success(Lang::get('mohsin.notify::lang.user.sent_to_group'));
             });
         });
 
@@ -168,7 +168,7 @@ class Plugin extends PluginBase
 
             $widget->addTabFields([
                 'fcm_token' => [
-                    'label' => 'FCM Token',
+                    'label' => 'mohsin.notify::lang.user.fcm_token',
                     'span'  => 'full'
                 ]
             ]);

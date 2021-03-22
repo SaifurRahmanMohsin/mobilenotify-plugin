@@ -4,13 +4,13 @@
     data-handler="onSendMessage"
     href="javascript:;"
     class="btn btn-primary">
-    Send Notification
+    <?= e(trans('mohsin.notify::lang.user.send_notification')) ?>
 </a><br><br>
 <a
     data-control="popup"
     data-handler="onSendGroupMessage"
     href="javascript:;"
     class="btn btn-default">
-    Send to Group
+    <?= e(trans('mohsin.notify::lang.user.send_to_group')) ?>
 </a>
 <?php endif ?>
