@@ -1,4 +1,6 @@
 {
+    "name": "mohsin/notify-plugin",
+    "type": "october-plugin",
     "require": {
         "brozot/laravel-fcm": "^1.3"
     },
